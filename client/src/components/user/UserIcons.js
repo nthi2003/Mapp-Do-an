@@ -4,10 +4,12 @@ import { Box, Badge, IconButton, Tooltip, Avatar } from '@mui/material';
 import React, { useState }  from 'react';
 import { useValue } from '../../context/ContextProvider';
 import UserMenu from './UserMenu';
+import useCheckToken from '../../hooks/useCheckToken';
 
 
 const UserIcons = () => {
-
+    useCheckToken();
+    
     const {state:{currentUser},} = useValue();
 
     const [anchorUserMenu, setAnchorUserMenu] = useState(null)

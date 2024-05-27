@@ -18,6 +18,7 @@ const reducer = (state, action)=>{
             return {...state, alert:action.payload};    
 
         case 'UPDATE_USER':
+            localStorage.setItem('currentUser', JSON.stringify(action.payload))
             return {...state, currentUser:action.payload};
     
         default:

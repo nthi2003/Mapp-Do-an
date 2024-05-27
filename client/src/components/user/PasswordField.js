@@ -19,26 +19,25 @@ const PasswordField = ({passwordRef, id='password', label='Password'}) => {
 
     return (
         <TextField
-                    autoFocus
-                    margin="normal"
-                    variant="standard"
-                    id={id}
-                    label={label}
-                    type={showPassword?'text' : 'password'}
-                    fullWidth
-                    inputRef={passwordRef}
-                    inputProps={{minLength:6}}
-                    required
-                    InputProps={{
-                        endAdornment: (
-                            <InputAdornment position="end">
-                                <IconButton onClick={handleClick} onMouseDown={handleMouseDown}>
-                                    {showPassword ? <VisibilityOff />: <Visibility />}
-                                </IconButton>
-                            </InputAdornment>
-                        ),
-                    }}
-                    />
+            margin="normal"
+            variant="standard"
+            id={id}
+            label={label}
+            type={showPassword?'text' : 'password'}
+            fullWidth
+            inputRef={passwordRef}
+            inputProps={{minLength:6}}
+            required
+            InputProps={{
+                endAdornment: (
+                    <InputAdornment position="end">
+                        <IconButton onClick={handleClick} onMouseDown={handleMouseDown}>
+                            {showPassword ? <VisibilityOff />: <Visibility />}
+                        </IconButton>
+                    </InputAdornment>
+                ),
+            }}
+            />
     );
 };
 
