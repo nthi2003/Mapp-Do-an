@@ -1,9 +1,9 @@
 import React from 'react'
 
-const LocationPoint = () => {
+const Pin = () => {
   return (
-    <div>LocationPoint</div>
+    <div>Pin</div>
   )
 }
 
-export default LocationPoint
+export default Pin

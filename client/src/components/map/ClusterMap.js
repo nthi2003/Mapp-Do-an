@@ -1,143 +1,73 @@
-import React, { useEffect, useState } from 'react';
-import { useValue } from '../../context/ContextProvider';
-import { getPins } from '../../actions/pin';
-import ReactMapGL, { Marker, Popup } from 'react-map-gl';
-import Supercluster from 'supercluster';
-import './cluster.css';
-import { Avatar, Paper, Tooltip } from '@mui/material';
-import GeocoderInput from '../sidebar/GeocoderInput';
-import PopupPin from './PopupPin';
-
-const supercluster = new Supercluster({
-  radius: 75,
-  maxZoom: 20,
-});
+import React, { useState, useEffect } from 'react';
+import ReactMapGL, { Marker } from 'react-map-gl';
+import { Box, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
 const ClusterMap = () => {
-  const {
-    state: { filteredPin },
-    dispatch,
-    mapRef,
-  } = useValue();
-  const [points, setPoints] = useState([]);
-  const [clusters, setClusters] = useState([]);
-  const [bounds, setBounds] = useState([-180, -85, 180, 85]);
-  const [zoom, setZoom] = useState(0);
-  const [popupInfo, setPopupInfo] = useState(null);
+  const [viewport, setViewport] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+    latitude: 16.0902647, // Center the map to the marker's location
+    longitude: 108.2373339, // Center the map to the marker's location
+    zoom: 12 // Adjust zoom level as needed
+  });
 
+  const [mapStyle, setMapStyle] = useState('mapbox://styles/mapbox/streets-v11'); // default style
+
+  // Adjust viewport dimensions when window size changes
   useEffect(() => {
-    getPins(dispatch);
+    const handleResize = () => {
+      setViewport((prevViewport) => ({
+        ...prevViewport,
+        width: window.innerWidth,
+        height: window.innerHeight
+      }));
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  useEffect(() => {
-    const points = filteredPin.map((pin) => ({
-      type: 'Feature',
-      properties: {
-        cluster: false,
-        pinId: pin._id,
-        price: pin.price,
-        title: pin.title,
-        description: pin.description,
-        lng: pin.lng,
-        lat: pin.lat,
-        images: pin.images,
-        uPhoto: pin.uPhoto,
-        uName: pin.uName,
-      },
-      geometry: {
-        type: 'Point',
-        coordinates: [parseFloat(pin.lng), parseFloat(pin.lat)],
-      },
-    }
-    
-  ));
-    setPoints(points);
-   
-  }, [filteredPin]);
-
-  useEffect(() => {
-    supercluster.load(points);
-    setClusters(supercluster.getClusters(bounds, zoom));
-  }, [points, zoom, bounds]);
-
-  useEffect(() => {
-    if (mapRef.current) {
-      setBounds(mapRef.current.getMap().getBounds().toArray().flat());
-    }
-  }, [mapRef?.current]);
   return (
-    <ReactMapGL
-      initialViewState={{ latitude: 51.5072, longitude: 0.1276 }}
-      mapboxAccessToken={process.env.REACT_APP_MAP_TOKEN}
-      mapStyle="mapbox://styles/mapbox/satellite-streets-v12"
-      ref={mapRef}
-      onZoomEnd={(e) => setZoom(Math.round(e.viewState.zoom))}
+    <Box
+      sx={{
+        height: '100vh', // Use full viewport height
+        width: '100vw',  // Use full viewport width
+        position: 'relative'
+      }}
     >
-      {clusters.map((cluster) => {
-        const { cluster: isCluster, point_count } = cluster.properties;
-        const [longitude, latitude] = cluster.geometry.coordinates;
-        if (isCluster) {
-          return (
-            <Marker
-              key={`cluster-${cluster.id}`}
-              longitude={longitude}
-              latitude={latitude}
-            >
-              <div
-                className="cluster-marker"
-                style={{
-                  width: `${10 + (point_count / points.length) * 20}px`,
-                  height: `${10 + (point_count / points.length) * 20}px`,
-                }}
-                onClick={() => {
-                  const zoom = Math.min(
-                    supercluster.getClusterExpansionZoom(cluster.id),
-                    20
-                  );
-                  mapRef.current.flyTo({
-                    center: [longitude, latitude],
-                    zoom,
-                    speed: 1,
-                  });
-                }}
-              >
-                {point_count}
-              </div>
-            </Marker>
-          );
-        }
-
-        return (
-          <Marker
-            key={`pin-${cluster.properties.pinId}`}
-            longitude={longitude}
-            latitude={latitude}
-          >
-            <Tooltip title={cluster.properties.uName}>
-              <Avatar
-                src={cluster.properties.uPhoto}
-                component={Paper}
-                elevation={2}
-                onClick={() => setPopupInfo(cluster.properties)}
-              />
-            </Tooltip>
-          </Marker>
-        );
-      })}
-      <GeocoderInput />
-      {popupInfo && (
-        <Popup
-        longitude={popupInfo.lng}
-          latitude={popupInfo.lat}
-          maxWidth="auto"
-          closeOnClick={false}
-          focusAfterOpen={false}
-          onClose={() => setPopupInfo(null)}
+      <FormControl sx={{ position: 'absolute', top: 10, left: 10, zIndex: 1, backgroundColor: 'white' }}>
+        <InputLabel id="map-style-label">Map Style</InputLabel>
+        <Select
+          labelId="map-style-label"
+          value={mapStyle}
+          label="Map Style"
+          onChange={(e) => setMapStyle(e.target.value)}
         >
-         <PopupPin {...{popupInfo}} />
-        </Popup>
-      )}
-    </ReactMapGL>
+          <MenuItem value="mapbox://styles/mapbox/streets-v11">Streets</MenuItem>
+          <MenuItem value="mapbox://styles/mapbox/satellite-v9">Satellite</MenuItem>
+          <MenuItem value="mapbox://styles/mapbox/satellite-streets-v11">Satellite Streets</MenuItem>
+          <MenuItem value="mapbox://styles/mapbox/streets-v11?language=vi">Streets (Vietnamese)</MenuItem>
+        </Select>
+      </FormControl>
+      <ReactMapGL
+        {...viewport}
+        mapboxAccessToken={process.env.REACT_APP_MAP_TOKEN}
+        onMove={(evt) => setViewport(evt.viewState)}
+        mapStyle={mapStyle} // Use the state mapStyle
+        dragPan={true}
+        dragRotate={true}
+        scrollZoom={true}
+        doubleClickZoom={true}
+      >
+        <Marker
+          latitude={16.0902647}
+          longitude={108.2373339}
+          offsetLeft={-10} // Adjust offsets as needed
+          offsetTop={-10}  // Adjust offsets as needed
+        >
+          <div style={{ color: 'red' }}>📍</div>
+        </Marker>
+      </ReactMapGL>
+    </Box>
   );
 };
 

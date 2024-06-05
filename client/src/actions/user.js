@@ -40,6 +40,18 @@ export const login = async (user, dispatch) => {
 };
 
 export const updateProfile = async (currentUser, updatedFields, dispatch) => {
+  if (!currentUser) {
+    dispatch({
+      type: 'UPDATE_ALERT',
+      payload: {
+        open: true,
+        severity: 'error',
+        message: 'User not authenticated',
+      },
+    });
+    return;
+  }
+
   dispatch({ type: 'START_LOADING' });
 
   const { name, file } = updatedFields;
@@ -92,20 +104,40 @@ export const updateProfile = async (currentUser, updatedFields, dispatch) => {
   dispatch({ type: 'END_LOADING' });
 };
 
-export const getUsers = async (dispatch) => {
-  const result = await fetchData({ url, method: 'GET' }, dispatch);
+export const getUsers = async (dispatch, currentUser) => {
+  if (!currentUser || !currentUser.token) {
+    console.error('User not authenticated');
+    return;
+  }
+
+  const result = await fetchData(
+    { url, method: 'GET', token: currentUser.token },
+    dispatch
+  );
   if (result) {
     dispatch({ type: 'UPDATE_USERS', payload: result });
   }
 };
 
-export const updateStatus = (updatedFields, userId, dispatch) => {
+export const updateStatus = (updatedFields, userId, dispatch, currentUser) => {
+  if (!currentUser || !currentUser.token) {
+    console.error('User not authenticated');
+    return;
+  }
+
   return fetchData(
     {
       url: `${url}/updateStatus/${userId}`,
       method: 'PATCH',
+      token: currentUser.token,
       body: updatedFields,
     },
     dispatch
   );
+};
+
+export const logout = (dispatch) => {
+  dispatch({ type: 'UPDATE_USER', payload: null });
+  dispatch({ type: 'RESET_PIN' });
+  dispatch({ type: 'UPDATE_USERS', payload: [] });
 };

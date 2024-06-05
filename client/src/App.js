@@ -1,17 +1,9 @@
-import React from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Dashboard from './pages/dashboard/Dashboard';
-import Home from './pages/Home';
+import React from 'react'
+import BottomNav from './components/bottomNav';
+
 const App = () => {
   return (
-    <>
-    <BrowserRouter>
-       <Routes>
-        <Route path='dashboard/*' element={<Dashboard/>}/>
-        <Route path="*" element={<Home />} />
-       </Routes>
-    </BrowserRouter>
-  </>
+    <BottomNav/>
   )
 };
 

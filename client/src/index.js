@@ -1,9 +1,7 @@
-import { createRoot } from 'react-dom/client';
+import React from 'react';
 import App from './App';
-import ContextProvider from './context/ContextProvider';
+import { createRoot } from 'react-dom/client';
 
-createRoot(document.getElementById('root')).render(
-  <ContextProvider>
-    <App />
-  </ContextProvider>
-);
+
+
+createRoot(document.getElementById('root')).render(<App/>)
