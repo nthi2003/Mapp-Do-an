@@ -1,9 +1,19 @@
-# Thành Viên
+# MAP APP
 
-### Nguyễn Văn Quốc Thi
+## Thành Viên
 
-### Nguyễn Nhật Nam
+### 👩‍💻 Nguyễn Văn Quốc Thi
 
-### Võ Văn Thắng
+### 👩‍💻 Nguyễn Nhật Nam
 
-### Phan Xuân Vương
+### 👩‍💻 Võ Văn Thắng
+
+### 👩‍💻 Phan Xuân Vương
+
+## Tech Stack
+
+**Client:** React, @Mui , MapBox , ...
+
+**Server:** Node, Express
+
+**NoSQL:** MongoDB

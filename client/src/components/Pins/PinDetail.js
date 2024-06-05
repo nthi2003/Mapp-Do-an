@@ -38,7 +38,7 @@ const PinDetail = () => {
       onClose={handleClose}
       TransitionComponent={Transition}
     >
-      <AppBar position='relative'>
+      <AppBar position='relative' sx={{backgroundColor: 'black'}}>
         <Toolbar>
           <Typography
             variant='h6'

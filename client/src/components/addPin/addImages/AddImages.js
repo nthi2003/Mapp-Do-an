@@ -13,6 +13,7 @@ const AddImages = () => {
     onDrop,
     accept: { 'image/*': [] },
   });
+
   return (
     <>
       <Paper
@@ -20,16 +21,17 @@ const AddImages = () => {
           cursor: 'pointer',
           background: '#fafafa',
           color: '#bdbdbd',
-          border: '1px dashed #ccc',
-          '&:hover': { border: '1px solid #ccc' },
+          border: '5px dashed #ccc', // Tăng độ rộng của nét đứt
+          '&:hover': { border: '5px dashed #ccc' }, // Đổi kiểu viền khi hover
+          padding: '16px', // Thêm padding để nội dung bên trong không chạm vào viền
         }}
       >
-        <div style={{ padding: '16px' }} {...getRootProps()}>
+        <div {...getRootProps()}>
           <input {...getInputProps()} />
           {isDragActive ? (
             <p style={{ color: 'green' }}>Drop the files here...</p>
           ) : (
-            <p>Drag 'n' Drop some files here, or click to select files</p>
+            <p>(¬_¬)</p>
           )}
           <em>(images with *.jpeg, *.png, *.jpg extension will be accepted)</em>
         </div>

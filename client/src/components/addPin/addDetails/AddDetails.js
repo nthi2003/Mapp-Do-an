@@ -49,7 +49,7 @@ const AddDetails = () => {
           <FormControlLabel value={1} control={<Radio />} label="Nominal Fee" />
           {Boolean(costType) && (
             <TextField
-              sx={{ width: '7ch !important' }}
+              sx={{ width: '7ch !important' , border: '5px dashed #ccc' }}
               variant="standard"
               InputProps={{
                 startAdornment: (

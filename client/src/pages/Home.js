@@ -5,9 +5,11 @@ import Login from '../components/user/Login';
 const Home = () => {
   return (
     <>
+      <div >
       <Login />
       <NavBar />
       <BottomNav />
+      </div>
     </>
   );
 };

@@ -24,8 +24,8 @@ const NavBar = () => {
 
   return (
     <>
-      <AppBar>
-        <Container maxWidth="lg">
+      <AppBar sx={{backgroundColor: 'black'}}>
+        <Container maxWidth="lg" sx={{backgroundColor: 'black'}}>
           <Toolbar disableGutters>
             <Box sx={{ mr: 1 }}>
               <IconButton
@@ -42,7 +42,7 @@ const NavBar = () => {
               noWrap
               sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}
             >
-              You Are Welcome
+              You are mapp app
             </Typography>
             <Typography
               variant="h6"
@@ -50,7 +50,7 @@ const NavBar = () => {
               noWrap
               sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
             >
-              YRW
+              MAPP
             </Typography>
             {!currentUser ? (
               <Button

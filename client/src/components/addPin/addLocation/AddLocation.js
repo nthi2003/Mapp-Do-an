@@ -56,7 +56,7 @@ const AddLocation = () => {
               latitude: lat,
               zoom: 8,
             }}
-            mapStyle="mapbox://styles/mapbox/streets-v11"
+            mapStyle="mapbox://styles/mapbox/satellite-streets-v12"
           >
             <Marker
               latitude={lat}

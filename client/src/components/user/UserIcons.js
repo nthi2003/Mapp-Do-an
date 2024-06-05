@@ -17,12 +17,12 @@ const UserIcons = () => {
     <Box>
       <IconButton size="large" color="inherit">
         <Badge color="error" badgeContent={5}>
-          <Mail sx={{color: 'black'}} />
+          <Mail sx={{color: 'white'}} />
         </Badge>
       </IconButton>
       <IconButton size="large" color="inherit">
         <Badge color="error" badgeContent={20}>
-          <Notifications sx={{color: 'black'}}  />
+          <Notifications sx={{color: 'white'}}  />
         </Badge>
       </IconButton>
       <Tooltip title="Open User Settings">

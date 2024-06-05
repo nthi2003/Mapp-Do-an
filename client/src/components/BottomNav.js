@@ -4,7 +4,8 @@ import {
   Box,
   Paper,
 } from '@mui/material';
-import { AddLocationAlt, Bed, LocationOn } from '@mui/icons-material';
+import PersonPinCircleIcon from '@mui/icons-material/PersonPinCircle';
+import { AddLocationAlt , LocationOn } from '@mui/icons-material';
 import { useEffect, useRef, useState } from 'react';
 import ClusterMap from './map/ClusterMap';
 import Pins from './Pins/Pin'
@@ -46,7 +47,7 @@ const BottomNav = () => {
           }
         >
           <BottomNavigationAction label="Map" icon={<LocationOn />} />
-          <BottomNavigationAction label="Pins" icon={<Bed />} />
+          <BottomNavigationAction label="Pins" icon={<PersonPinCircleIcon/>} />
           <BottomNavigationAction label="Add" icon={<AddLocationAlt />} />
         </BottomNavigation>
       </Paper>

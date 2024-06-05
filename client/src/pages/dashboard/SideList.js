@@ -21,6 +21,7 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
+import PersonPinCircleIcon from '@mui/icons-material/PersonPinCircle';
 import MuiDrawer from '@mui/material/Drawer';
 import { useMemo, useState } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
@@ -28,8 +29,7 @@ import { Route, Routes, useNavigate } from 'react-router-dom';
 import { logout } from '../../actions/user';
 import { useValue } from '../../context/ContextProvider';
 import Main from './main/Main';
-import Messages from './messages/Messages';
-import Requests from './requests/Requests';
+
 
 import Users from './users/Users';
 import useCheckToken from '../../hooks/useCheckToken';
@@ -125,22 +125,11 @@ const SideList = ({ open, setOpen }) => {
 
       {
         title: 'pins',
-        icon: <KingBed />,
+        icon: <PersonPinCircleIcon />,
         link: 'pins',
         component: <Pins {...{ setSelectedLink, link: 'pins' }} />,
       },
-      {
-        title: 'Requests',
-        icon: <NotificationsActive />,
-        link: 'requests',
-        component: <Requests {...{ setSelectedLink, link: 'requests' }} />,
-      },
-      {
-        title: 'Messages',
-        icon: <MarkChatUnread />,
-        link: 'messages',
-        component: <Messages {...{ setSelectedLink, link: 'messages' }} />,
-      },
+      
     ],
     [currentUser]
   );
