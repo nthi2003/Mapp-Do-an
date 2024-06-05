@@ -9,7 +9,7 @@
 
 ### 👩‍💻 Võ Văn Thắng
 
-### 👩‍💻 Phan Xuân Vương
+### 👩‍💻 Phan Xuân Vương CNTT2
 
 ## Tech Stack
 
