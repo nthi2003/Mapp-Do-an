@@ -1,64 +1,114 @@
-
-
-import { MenuItem, Menu, ListItemIcon } from '@mui/material';
-import React from 'react';
-import { Logout, Settings } from '@mui/icons-material';
+import { Dashboard, Logout, Settings } from '@mui/icons-material';
+import { ListItemIcon, Menu, MenuItem } from '@mui/material';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useValue } from '../../context/ContextProvider';
 import useCheckToken from '../../hooks/useCheckToken';
+import Profile from './Profile';
+import { storePin } from '../../actions/pin';
+import { logout } from '../../actions/user';
 
-const UserMenu = ({anchorUserMenu, setAnchorUserMenu}) => {
-    useCheckToken();
-    const {
-        dispatch, 
-        state:{currentUser},
-    } = useValue()
-    const handleCloseUserMenu = ()=>{
-        setAnchorUserMenu(null)
-    }
+const UserMenu = ({ anchorUserMenu, setAnchorUserMenu }) => {
+  useCheckToken();
+  const {
+    dispatch,
+    state: {
+      currentUser,
+      location,
+      details,
+      images,
+      updatedPin,
+      deletedImages,
+      addedImages,
+    },
+  } = useValue();
 
-    const  testAuthorization = async()=>{
-        const url = process.env.REACT_APP_SERVER_URL + '/room'
-        try {
-            const response = await fetch(url, {
-                method:'POST',
-                headers:{
-                    'Content-Type':'application/json',
-                    authorization: `Bearer ${currentUser.token}t`,
-                },
-            })
-            const data = await response.json()
-            console.log(data)
-            if(!data.success){
-                if(response.status === 401) dispatch({type:'UPDATE_USER', payload: null})
-                throw new Error(data.message)
-            }
-        } catch (error) {
-            dispatch({type:'UPDATE_ALERT', payload:{open:true, severity:'error', message:error.message}})
-            console.log(error)
-        }
-    }
+  const handleCloseUserMenu = () => {
+    setAnchorUserMenu(null);
+  };
 
-    return (
-        <Menu
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    storePin(
+      location,
+      details,
+      images,
+      updatedPin,
+      deletedImages,
+      addedImages,
+      currentUser.id
+    );
+    logout(dispatch);
+    handleCloseUserMenu();
+    navigate('/'); // Navigate to home or login page after logout
+  };
+
+  useEffect(() => {
+    const storeBeforeLeave = (e) => {
+      if (
+        storePin(
+          location,
+          details,
+          images,
+          updatedPin,
+          deletedImages,
+          addedImages,
+          currentUser.id
+        )
+      ) {
+        e.preventDefault();
+        e.returnValue = true;
+      }
+    };
+
+    window.addEventListener('beforeunload', storeBeforeLeave);
+    return () => window.removeEventListener('beforeunload', storeBeforeLeave);
+  }, [location, details, images, updatedPin, deletedImages, addedImages, currentUser.id]);
+
+  return (
+    <>
+      <Menu
         anchorEl={anchorUserMenu}
         open={Boolean(anchorUserMenu)}
         onClose={handleCloseUserMenu}
-        onClick= {handleCloseUserMenu}
-        >
-            <MenuItem onClick={testAuthorization}>
-                <ListItemIcon>
-                    <Settings fontSize="small" />
-                </ListItemIcon>
-                Profile
-            </MenuItem>
-            <MenuItem onClick={()=>dispatch({type:'UPDATE_USER', payload:null})}>
-                <ListItemIcon>
-                    <Logout fontSize="small" />
-                </ListItemIcon>
-                Logout
-            </MenuItem>
-        </Menu>
-    );
+        onClick={handleCloseUserMenu}
+      >
+        {!currentUser.google && (
+          <MenuItem
+            onClick={() =>
+              dispatch({
+                type: 'UPDATE_PROFILE',
+                payload: {
+                  open: true,
+                  file: null,
+                  photoURL: currentUser?.photoURL,
+                },
+              })
+            }
+          >
+            <ListItemIcon>
+              <Settings fontSize="small" />
+            </ListItemIcon>
+            Profile
+          </MenuItem>
+        )}
+        <MenuItem onClick={() => navigate('dashboard')}>
+          <ListItemIcon>
+            <Dashboard fontSize="small" />
+          </ListItemIcon>
+          Dashboard
+        </MenuItem>
+        <MenuItem onClick={handleLogout}>
+          <ListItemIcon>
+            <Logout fontSize="small" />
+          </ListItemIcon>
+          Logout
+        </MenuItem>
+      </Menu>
+      <Profile />
+    </>
+  );
 };
 
 export default UserMenu;

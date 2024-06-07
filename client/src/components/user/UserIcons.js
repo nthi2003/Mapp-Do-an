@@ -1,40 +1,40 @@
-
 import { Mail, Notifications } from '@mui/icons-material';
-import { Box, Badge, IconButton, Tooltip, Avatar } from '@mui/material';
-import React, { useState }  from 'react';
+import { Avatar, Badge, Box, IconButton, Tooltip } from '@mui/material';
+import React, { useState } from 'react';
 import { useValue } from '../../context/ContextProvider';
-import UserMenu from './UserMenu';
 import useCheckToken from '../../hooks/useCheckToken';
-
+import UserMenu from './UserMenu';
 
 const UserIcons = () => {
-    useCheckToken();
-    
-    const {state:{currentUser},} = useValue();
+  useCheckToken();
+  const {
+    state: { currentUser },
+  } = useValue();
 
-    const [anchorUserMenu, setAnchorUserMenu] = useState(null)
-    return (
-        <Box>
-            <IconButton size='large' color='inherit'>
-                <Badge color='error' badgeContent={5}>
-                    <Mail />
-                </Badge>
-            </IconButton>
-            <IconButton size='large' color='inherit'>
-                <Badge color='error' badgeContent={20}>
-                    <Notifications />
-                </Badge>
-            </IconButton>
-            <Tooltip title='Open user setting'>
-                <IconButton onClick={(e)=>setAnchorUserMenu(e.currentTarget)}>
-                    <Avatar src={currentUser?.photoURL} alt={currentUser?.name}>
-                        {currentUser?.name?.charAt(0).toUpperCase()}
-                    </Avatar>
-                </IconButton>
-            </Tooltip>
-            <UserMenu {...{anchorUserMenu, setAnchorUserMenu}} />
-        </Box>
-    );
+  const [anchorUserMenu, setAnchorUserMenu] = useState(null);
+
+  return (
+    <Box>
+      <IconButton size="large" color="inherit">
+        <Badge color="error" badgeContent={5}>
+          <Mail sx={{color: 'black'}} />
+        </Badge>
+      </IconButton>
+      <IconButton size="large" color="inherit">
+        <Badge color="error" badgeContent={20}>
+          <Notifications sx={{color: 'black'}}  />
+        </Badge>
+      </IconButton>
+      <Tooltip title="Open User Settings">
+        <IconButton onClick={(e) => setAnchorUserMenu(e.currentTarget)}>
+          <Avatar src={currentUser?.photoURL} alt={currentUser?.name}>
+            {currentUser?.name?.charAt(0).toUpperCase()}
+          </Avatar>
+        </IconButton>
+      </Tooltip>
+      <UserMenu {...{ anchorUserMenu, setAnchorUserMenu }} />
+    </Box>
+  );
 };
 
 export default UserIcons;
